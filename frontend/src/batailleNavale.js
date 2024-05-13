@@ -7,6 +7,7 @@ var colors = {
     4: 'pink',
     // Ajoutez d'autres couleurs et valeurs au besoin
 };
+var actualBoat = null;
 var shipsArray = [
     { size: 5, startX: 0, startY: 0, direction: 'horizontal' },
     { size: 4, startX: 0, startY: 0, direction: 'horizontal' },
@@ -35,13 +36,14 @@ var _loop_1 = function (i) {
         cell.style.cursor = 'pointer';
         cell.style.backgroundColor = colors[value];
         cell.addEventListener('click', function () {
-            // Change la valeur au clic et met à jour la couleur
-            gridValues[i][j] = 1;
-            cell.textContent = gridValues[i][j].toString();
-            cell.style.backgroundColor = colors[gridValues[i][j]];
+            if (actualBoat != null) {
+                gridValues[i][j] = 1;
+                cell.textContent = gridValues[i][j].toString();
+                cell.style.backgroundColor = colors[gridValues[i][j]];
+            }
         });
         cell.addEventListener('mouseenter', function () {
-            if (gridValues[i][j] == 0) {
+            if (gridValues[i][j] == 0 && actualBoat != null) {
                 gridValues[i][j] = 4;
                 cell.textContent = gridValues[i][j].toString();
                 cell.style.backgroundColor = colors[gridValues[i][j]];
@@ -50,7 +52,7 @@ var _loop_1 = function (i) {
             }
         });
         cell.addEventListener('mouseleave', function () {
-            if (gridValues[i][j] != 1) {
+            if (gridValues[i][j] != 1 && actualBoat != null) {
                 gridValues[i][j] = 0;
                 cell.textContent = gridValues[i][j].toString();
                 cell.style.backgroundColor = colors[gridValues[i][j]];
@@ -94,7 +96,7 @@ function displayShip(ship) {
         shipElements.forEach(function (shipElement) {
             shipElement.style.backgroundColor = 'black';
         });
-        var actualBoat = ship;
+        actualBoat = ship;
         shipElement.style.backgroundColor = 'blue';
         console.log('Bateau cliqué:', ship);
     });

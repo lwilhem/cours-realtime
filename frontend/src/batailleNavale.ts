@@ -8,7 +8,16 @@ const colors:{[key:number]:string} = {
     // Ajoutez d'autres couleurs et valeurs au besoin
 };
 
-const shipsArray: { size: number; startX: number; startY: number; direction: 'horizontal' | 'vertical' }[] = [
+interface Ship {
+    size: number;
+    startX: number;
+    startY: number;
+    direction: 'horizontal' | 'vertical';
+}
+
+let actualBoat: Ship | null = null;
+
+const shipsArray: Ship[] = [
     { size: 5,startX:0,startY:0,direction:'horizontal'},
     { size: 4,startX:0,startY:0,direction:'horizontal'},
     { size: 3,startX:0,startY:0,direction:'horizontal'},
@@ -40,13 +49,15 @@ for (let i = 0; i < 10; i++) {
         cell.style.cursor = 'pointer';
         cell.style.backgroundColor = colors[value];
         cell.addEventListener('click', () => {
-            // Change la valeur au clic et met à jour la couleur
-            gridValues[i][j] = 1;
-            cell.textContent = gridValues[i][j].toString();
-            cell.style.backgroundColor = colors[gridValues[i][j]];
+            if(actualBoat != null){
+                gridValues[i][j] = 1;
+                cell.textContent = gridValues[i][j].toString();
+                cell.style.backgroundColor = colors[gridValues[i][j]];
+            }
         });
         cell.addEventListener('mouseenter',()=>{
-            if(gridValues[i][j] == 0){
+            
+            if(gridValues[i][j] == 0 && actualBoat != null){
                 gridValues[i][j] = 4;
                 cell.textContent = gridValues[i][j].toString();
                 cell.style.backgroundColor = colors[gridValues[i][j]];
@@ -55,7 +66,7 @@ for (let i = 0; i < 10; i++) {
             }
         })
         cell.addEventListener('mouseleave',()=>{
-            if(gridValues[i][j] != 1){
+            if(gridValues[i][j] != 1 && actualBoat != null){
                 gridValues[i][j] = 0;
                 cell.textContent = gridValues[i][j].toString();
                 cell.style.backgroundColor = colors[gridValues[i][j]];
@@ -97,7 +108,7 @@ function displayShip(ship: { size: number; startX: number; startY: number; direc
         shipElements.forEach(shipElement => {
             shipElement.style.backgroundColor = 'black';
         });
-        let actualBoat = ship;
+        actualBoat = ship;
         shipElement.style.backgroundColor = 'blue';
         console.log('Bateau cliqué:', ship);
     });
