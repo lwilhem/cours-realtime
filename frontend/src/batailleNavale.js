@@ -25,9 +25,10 @@ var gridValues = []; // Tableau pour stocker les valeurs de la grille
 var _loop_1 = function (i) {
     var row = [];
     var _loop_2 = function (j) {
-        var value = 0; // Valeur aléatoire entre 0 et 2
+        var value = 0;
         row.push(value);
         var cell = document.createElement('div');
+        cell.id = "cell-".concat(i, "-").concat(j);
         cell.textContent = value.toString();
         cell.style.width = '50px';
         cell.style.height = '50px';
@@ -36,28 +37,22 @@ var _loop_1 = function (i) {
         cell.style.cursor = 'pointer';
         cell.style.backgroundColor = colors[value];
         cell.addEventListener('click', function () {
-            if (actualBoat != null) {
-                gridValues[i][j] = 1;
-                cell.textContent = gridValues[i][j].toString();
-                cell.style.backgroundColor = colors[gridValues[i][j]];
+            if (actualBoat !== null) {
+                var colorValue = 1;
+                affectAdjacentCells(gridValues, i, j, actualBoat.size, actualBoat.direction, colorValue);
             }
         });
         cell.addEventListener('mouseenter', function () {
-            if (gridValues[i][j] == 0 && actualBoat != null) {
-                gridValues[i][j] = 4;
-                cell.textContent = gridValues[i][j].toString();
-                cell.style.backgroundColor = colors[gridValues[i][j]];
-                console.log(gridValues[i][j]);
-                console.log('truc');
+            if (gridValues[i][j] == 0 && actualBoat !== null) {
+                var colorValue = 4;
+                affectAdjacentCells(gridValues, i, j, actualBoat.size, actualBoat.direction, colorValue);
             }
         });
         cell.addEventListener('mouseleave', function () {
-            if (gridValues[i][j] != 1 && actualBoat != null) {
-                gridValues[i][j] = 0;
-                cell.textContent = gridValues[i][j].toString();
-                cell.style.backgroundColor = colors[gridValues[i][j]];
-                console.log(gridValues[i][j]);
-                console.log('truc');
+            if (gridValues[i][j] != 1 && actualBoat !== null) {
+                console.log(gridValues);
+                var colorValue = 0;
+                affectAdjacentCells(gridValues, i, j, actualBoat.size, actualBoat.direction, colorValue);
             }
         });
         gridContainer.appendChild(cell);
@@ -67,7 +62,7 @@ var _loop_1 = function (i) {
     }
     gridValues.push(row);
 };
-// Initialisation de la grille avec des valeurs aléatoires
+// Initialisation de la grille
 for (var i = 0; i < 10; i++) {
     _loop_1(i);
 }
@@ -127,4 +122,48 @@ function clearShipContainer() {
     while (shipContainer.firstChild) {
         shipContainer.removeChild(shipContainer.firstChild);
     }
+}
+function affectAdjacentCells(gridValues, i, j, boatSize, direction, colorValue) {
+    var adjacentIndices = [];
+    console.log(colorValue);
+    switch (direction) {
+        case 'horizontal':
+            for (var k = 1; k <= boatSize - 1; k++) {
+                if (j < 5) {
+                    if (j - k >= 0)
+                        adjacentIndices.push([i, j - k]);
+                }
+                if (j >= 5) {
+                    if (j + k < 10)
+                        adjacentIndices.push([i, j + k]);
+                }
+            }
+            break;
+        case 'vertical':
+            for (var k = 1; k <= boatSize; k++) {
+                if (i < 5) {
+                    if (i - k >= 0)
+                        adjacentIndices.push([i - k, j]);
+                }
+                if (i >= 5) {
+                    if (i + k < 10)
+                        adjacentIndices.push([i + k, j]);
+                }
+            }
+            break;
+    }
+    adjacentIndices.push([i, j]);
+    console.log(adjacentIndices);
+    adjacentIndices.forEach(function (_a) {
+        var x = _a[0], y = _a[1];
+        console.log(colorValue);
+        gridValues[x][y] = colorValue; // Utilisez colorValue pour définir la valeur de la case
+        var adjacentCell = document.getElementById("cell-".concat(x, "-").concat(y));
+        if (adjacentCell) {
+            adjacentCell.textContent = gridValues[x][y].toString();
+            adjacentCell.style.backgroundColor = colors[colorValue];
+        }
+    });
+    console.log(gridValues[i][j]);
+    console.log('affected');
 }
