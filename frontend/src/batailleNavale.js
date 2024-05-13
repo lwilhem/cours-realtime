@@ -1,11 +1,9 @@
-// Définition des couleurs en fonction des valeurs
 var colors = {
     0: 'white',
     1: 'black',
     2: 'green',
     3: 'red',
     4: 'pink',
-    // Ajoutez d'autres couleurs et valeurs au besoin
 };
 var actualBoat = null;
 var shipsArray = [
@@ -126,42 +124,83 @@ function clearShipContainer() {
 function affectAdjacentCells(gridValues, i, j, boatSize, direction, colorValue) {
     var adjacentIndices = [];
     console.log(colorValue);
+    console.log("i" + i);
+    console.log("j" + j);
+    var n = 1;
+    var adjacent = false;
     switch (direction) {
         case 'horizontal':
             for (var k = 1; k <= boatSize - 1; k++) {
                 if (j < 5) {
-                    if (j - k >= 0)
-                        adjacentIndices.push([i, j - k]);
+                    j = j < Math.floor(boatSize / 2) ? Math.floor(boatSize / 2) : j;
+                    if (adjacent === false) {
+                        adjacentIndices.push([i, j - n]);
+                        adjacent = true;
+                    }
+                    else {
+                        adjacentIndices.push([i, j + n]);
+                        adjacent = false;
+                        n++;
+                    }
                 }
                 if (j >= 5) {
-                    if (j + k < 10)
-                        adjacentIndices.push([i, j + k]);
+                    j = j >= 10 - Math.floor(boatSize / 2) ? 9 - Math.floor(boatSize / 2) : j;
+                    if (adjacent === false) {
+                        adjacentIndices.push([i, j + n]);
+                        adjacent = true;
+                    }
+                    else {
+                        adjacentIndices.push([i, j - n]);
+                        adjacent = false;
+                        n++;
+                    }
                 }
             }
             break;
         case 'vertical':
-            for (var k = 1; k <= boatSize; k++) {
+            for (var k = 1; k <= boatSize - 1; k++) {
                 if (i < 5) {
-                    if (i - k >= 0)
-                        adjacentIndices.push([i - k, j]);
+                    i = i < Math.floor(boatSize / 2) ? Math.floor(boatSize / 2) : i;
+                    if (adjacent === false) {
+                        adjacentIndices.push([i - n, j]);
+                        adjacent = true;
+                    }
+                    else {
+                        adjacentIndices.push([i + n, j]);
+                        adjacent = false;
+                        n++;
+                    }
                 }
                 if (i >= 5) {
-                    if (i + k < 10)
-                        adjacentIndices.push([i + k, j]);
+                    i = i >= 10 - Math.floor(boatSize / 2) ? 9 - Math.floor(boatSize / 2) : i;
+                    if (adjacent === false) {
+                        adjacentIndices.push([i + n, j]);
+                        adjacent = true;
+                    }
+                    else {
+                        adjacentIndices.push([i - n, j]);
+                        adjacent = false;
+                        n++;
+                    }
                 }
             }
             break;
     }
+    console.log('i after ' + i);
+    console.log('j after ' + j);
     adjacentIndices.push([i, j]);
     console.log(adjacentIndices);
     adjacentIndices.forEach(function (_a) {
         var x = _a[0], y = _a[1];
-        console.log(colorValue);
-        gridValues[x][y] = colorValue; // Utilisez colorValue pour définir la valeur de la case
-        var adjacentCell = document.getElementById("cell-".concat(x, "-").concat(y));
-        if (adjacentCell) {
-            adjacentCell.textContent = gridValues[x][y].toString();
-            adjacentCell.style.backgroundColor = colors[colorValue];
+        if (gridValues[x][y] !== 1) {
+            console.log(colorValue);
+            gridValues[x][y] = colorValue;
+            var adjacentCell = document.getElementById("cell-".concat(x, "-").concat(y));
+            console.log(adjacentCell);
+            if (adjacentCell) {
+                adjacentCell.textContent = gridValues[x][y].toString();
+                adjacentCell.style.backgroundColor = colors[colorValue];
+            }
         }
     });
     console.log(gridValues[i][j]);

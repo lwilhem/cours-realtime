@@ -1,11 +1,9 @@
-// Définition des couleurs en fonction des valeurs
 const colors:{[key:number]:string} = {
     0: 'white',
     1: 'black',
     2: 'green',
     3: 'red',
     4:'pink',
-    // Ajoutez d'autres couleurs et valeurs au besoin
 };
 
 interface Ship {
@@ -162,39 +160,84 @@ function clearShipContainer(): void {
 function affectAdjacentCells(gridValues: number[][], i: number, j: number, boatSize: number, direction: 'horizontal' | 'vertical', colorValue: number) {
     let adjacentIndices = [];
     console.log(colorValue);
-
+    console.log("i"+i)
+    console.log("j"+j)
+    
+    let n:number=1;
+    let adjacent:boolean = false;
     switch (direction) {
         case 'horizontal':
             for (let k = 1; k <= boatSize-1; k++) {
+                
+
                 if(j<5){
-                    if (j - k >= 0) adjacentIndices.push([i, j - k]);
+                    j = j<Math.floor(boatSize/2)? Math.floor(boatSize/2):j;
+                    if(adjacent === false){
+                        adjacentIndices.push([i, j - n]);
+                        adjacent = true
+                    }else{
+                        adjacentIndices.push([i, j + n]);
+                        adjacent = false
+                        n++
+                    }
                 }
                 if(j>=5){
-                    if (j + k < 10) adjacentIndices.push([i, j + k]);
+                    j = j>=10-Math.floor(boatSize/2)? 9-Math.floor(boatSize/2):j;
+                    if(adjacent === false){
+                        adjacentIndices.push([i, j +  n]);
+                        adjacent = true
+                    }else{
+                        adjacentIndices.push([i, j - n]);
+                        adjacent = false
+                        n++
+                    }
                 }
             }
             break;
         case 'vertical':
-            for (let k = 1; k <= boatSize; k++) {
+            for (let k = 1; k <= boatSize-1; k++) {
                 if(i<5){
-                    if (i - k >= 0) adjacentIndices.push([i - k, j]); 
+                    i = i<Math.floor(boatSize/2)? Math.floor(boatSize/2):i;
+                    if(adjacent === false){
+                        adjacentIndices.push([i - n, j]); 
+                        adjacent = true
+                    }else{
+                        adjacentIndices.push([i + n, j]); 
+                        adjacent = false
+                        n++
+
+                    }
                 }
                 if(i>=5){
-                    if (i + k < 10) adjacentIndices.push([i + k, j]);
+                    i = i>=10-Math.floor(boatSize/2)? 9-Math.floor(boatSize/2):i;
+                    if(adjacent === false){
+                        adjacentIndices.push([i + n, j]);
+                        adjacent = true
+                    }else{
+                        adjacentIndices.push([i - n, j]);
+                        adjacent = false
+                        n++
+                    }
+                    
                 }
                 
             }
             break;
     }
+    console.log('i after '+i);
+    console.log('j after '+j)
     adjacentIndices.push([i,j]);
     console.log(adjacentIndices);
     adjacentIndices.forEach(([x, y]) => {
-        console.log(colorValue);
-        gridValues[x][y] = colorValue; 
-        const adjacentCell = document.getElementById(`cell-${x}-${y}`);
-        if (adjacentCell) {
-            adjacentCell.textContent = gridValues[x][y].toString();
-            adjacentCell.style.backgroundColor = colors[colorValue];
+        if(gridValues[x][y] !== 1){
+            console.log(colorValue);
+            gridValues[x][y] = colorValue; 
+            const adjacentCell = document.getElementById(`cell-${x}-${y}`);
+            console.log(adjacentCell);
+            if (adjacentCell) {
+                adjacentCell.textContent = gridValues[x][y].toString();
+                adjacentCell.style.backgroundColor = colors[colorValue];
+            }
         }
     });
 
