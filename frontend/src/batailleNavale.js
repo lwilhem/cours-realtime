@@ -7,6 +7,13 @@ var colors = {
     4: 'pink',
     // Ajoutez d'autres couleurs et valeurs au besoin
 };
+var shipsArray = [
+    { size: 5, startX: 0, startY: 0, direction: 'horizontal' },
+    { size: 4, startX: 0, startY: 0, direction: 'horizontal' },
+    { size: 3, startX: 0, startY: 0, direction: 'horizontal' },
+    { size: 3, startX: 0, startY: 0, direction: 'horizontal' },
+    { size: 2, startX: 0, startY: 0, direction: 'horizontal' },
+];
 // Création de la grille
 var gridContainer = document.createElement('div');
 gridContainer.style.display = 'grid';
@@ -40,15 +47,15 @@ var _loop_1 = function (i) {
                 cell.style.backgroundColor = colors[gridValues[i][j]];
                 console.log(gridValues[i][j]);
                 console.log('truc');
-                cell.addEventListener('mouseleave', function () {
-                    if (gridValues[i][j] != 1) {
-                        gridValues[i][j] = 0;
-                        cell.textContent = gridValues[i][j].toString();
-                        cell.style.backgroundColor = colors[gridValues[i][j]];
-                        console.log(gridValues[i][j]);
-                        console.log('truc');
-                    }
-                });
+            }
+        });
+        cell.addEventListener('mouseleave', function () {
+            if (gridValues[i][j] != 1) {
+                gridValues[i][j] = 0;
+                cell.textContent = gridValues[i][j].toString();
+                cell.style.backgroundColor = colors[gridValues[i][j]];
+                console.log(gridValues[i][j]);
+                console.log('truc');
             }
         });
         gridContainer.appendChild(cell);
@@ -62,3 +69,36 @@ var _loop_1 = function (i) {
 for (var i = 0; i < 10; i++) {
     _loop_1(i);
 }
+// Créer un conteneur pour les bateaux
+var shipContainer = document.createElement('div');
+shipContainer.style.display = 'flex';
+shipContainer.style.flexDirection = 'column';
+shipContainer.style.alignItems = 'center';
+shipContainer.style.gap = '20px'; // Ajouter un espace entre la grille et les bateaux
+document.body.appendChild(shipContainer);
+// Fonction pour afficher un bateau
+function displayShip(ship) {
+    var shipElement = document.createElement('div');
+    if (ship.direction == 'vertical') {
+        shipElement.style.width = "50px"; // Taille du bateau en pixels
+        shipElement.style.height = "".concat(ship.size * 50, "px"); // Taille du bateau en pixels
+    }
+    else {
+        shipElement.style.width = "".concat(ship.size * 50, "px"); // Taille du bateau en pixels
+        shipElement.style.height = "50px"; // Taille du bateau en pixels
+    }
+    shipElement.style.backgroundColor = 'black'; // Couleur du bateau, ajustez selon vos préférences
+    shipElement.style.cursor = 'pointer';
+    shipElement.addEventListener('click', function () {
+        var shipElements = shipContainer.querySelectorAll('div');
+        shipElements.forEach(function (shipElement) {
+            shipElement.style.backgroundColor = 'black';
+        });
+        var actualBoat = ship;
+        shipElement.style.backgroundColor = 'blue';
+        console.log('Bateau cliqué:', ship);
+    });
+    shipContainer.appendChild(shipElement);
+}
+// Exemple d'utilisation de la fonction displayShip
+shipsArray.forEach(function (ship) { return displayShip(ship); });
