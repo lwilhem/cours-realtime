@@ -53,7 +53,19 @@ for (let i = 0; i < 10; i++) {
             if(actualBoat !== null){
                 let colorValue = 1;
                 affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue);
-                
+                const boatToRemove = shipsArray.find(ship => ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size);
+                if (boatToRemove) {
+                    // Supprimer le bateau de shipsArray
+                    const index = shipsArray.indexOf(boatToRemove);
+                    if (index > -1) {
+                        shipsArray.splice(index, 1);
+                    }
+        
+                    // Réinitialiser le bateau actuel
+                    actualBoat = null;
+                clearShipContainer();
+                shipsArray.forEach(ship => displayShip(ship));
+                }                
             }
         });
         cell.addEventListener('mouseenter',()=>{
@@ -228,18 +240,25 @@ function affectAdjacentCells(gridValues: number[][], i: number, j: number, boatS
     console.log('j after '+j)
     adjacentIndices.push([i,j]);
     console.log(adjacentIndices);
-    adjacentIndices.forEach(([x, y]) => {
-        if(gridValues[x][y] !== 1){
-            console.log(colorValue);
-            gridValues[x][y] = colorValue; 
-            const adjacentCell = document.getElementById(`cell-${x}-${y}`);
-            console.log(adjacentCell);
-            if (adjacentCell) {
-                adjacentCell.textContent = gridValues[x][y].toString();
-                adjacentCell.style.backgroundColor = colors[colorValue];
-            }
-        }
+    let isValid = true
+    adjacentIndices.forEach(([x, y]) =>{
+        isValid = gridValues[x][y] == 1? false:isValid;
     });
+    if(isValid == true){
+        adjacentIndices.forEach(([x, y]) => {
+            if(gridValues[x][y] !== 1){
+                console.log(colorValue);
+                gridValues[x][y] = colorValue; 
+                const adjacentCell = document.getElementById(`cell-${x}-${y}`);
+                console.log(adjacentCell);
+                if (adjacentCell) {
+                    adjacentCell.textContent = gridValues[x][y].toString();
+                    adjacentCell.style.backgroundColor = colors[colorValue];
+                }
+            }
+        });
+    }
+    
 
     console.log(gridValues[i][j]);
     console.log('affected');

@@ -38,6 +38,19 @@ var _loop_1 = function (i) {
             if (actualBoat !== null) {
                 var colorValue = 1;
                 affectAdjacentCells(gridValues, i, j, actualBoat.size, actualBoat.direction, colorValue);
+                var boatToRemove = shipsArray.find(function (ship) { return ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size; });
+                if (boatToRemove) {
+                    // Supprimer le bateau de shipsArray
+                    var index = shipsArray.indexOf(boatToRemove);
+                    if (index > -1) {
+                        shipsArray.splice(index, 1);
+                    }
+                    // Réinitialiser le bateau actuel
+                    actualBoat = null;
+                    clearShipContainer();
+                    shipsArray.forEach(function (ship) { return displayShip(ship); });
+                }
+                console.log("retirer");
             }
         });
         cell.addEventListener('mouseenter', function () {
@@ -190,19 +203,26 @@ function affectAdjacentCells(gridValues, i, j, boatSize, direction, colorValue) 
     console.log('j after ' + j);
     adjacentIndices.push([i, j]);
     console.log(adjacentIndices);
+    var isValid = true;
     adjacentIndices.forEach(function (_a) {
         var x = _a[0], y = _a[1];
-        if (gridValues[x][y] !== 1) {
-            console.log(colorValue);
-            gridValues[x][y] = colorValue;
-            var adjacentCell = document.getElementById("cell-".concat(x, "-").concat(y));
-            console.log(adjacentCell);
-            if (adjacentCell) {
-                adjacentCell.textContent = gridValues[x][y].toString();
-                adjacentCell.style.backgroundColor = colors[colorValue];
-            }
-        }
+        isValid = gridValues[x][y] == 1 ? false : isValid;
     });
+    if (isValid == true) {
+        adjacentIndices.forEach(function (_a) {
+            var x = _a[0], y = _a[1];
+            if (gridValues[x][y] !== 1) {
+                console.log(colorValue);
+                gridValues[x][y] = colorValue;
+                var adjacentCell = document.getElementById("cell-".concat(x, "-").concat(y));
+                console.log(adjacentCell);
+                if (adjacentCell) {
+                    adjacentCell.textContent = gridValues[x][y].toString();
+                    adjacentCell.style.backgroundColor = colors[colorValue];
+                }
+            }
+        });
+    }
     console.log(gridValues[i][j]);
     console.log('affected');
 }
