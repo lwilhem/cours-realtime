@@ -9,11 +9,11 @@ var colors = {
 };
 var actualBoat = null;
 var shipsArray = [
-    { size: 5, startX: 0, startY: 0, direction: 'horizontal' },
-    { size: 4, startX: 0, startY: 0, direction: 'horizontal' },
-    { size: 3, startX: 0, startY: 0, direction: 'horizontal' },
-    { size: 3, startX: 0, startY: 0, direction: 'horizontal' },
-    { size: 2, startX: 0, startY: 0, direction: 'horizontal' },
+    { size: 5, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+    { size: 4, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+    { size: 3, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+    { size: 3, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+    { size: 2, startX: 0, startY: 0, direction: 'horizontal', selected: false },
 ];
 // Création de la grille
 var gridContainer = document.createElement('div');
@@ -76,26 +76,29 @@ var shipContainer = document.createElement('div');
 shipContainer.style.display = 'flex';
 shipContainer.style.flexDirection = 'column';
 shipContainer.style.alignItems = 'center';
-shipContainer.style.gap = '20px'; // Ajouter un espace entre la grille et les bateaux
+shipContainer.style.gap = '20px';
 document.body.appendChild(shipContainer);
 // Fonction pour afficher un bateau
 function displayShip(ship) {
     var shipElement = document.createElement('div');
     if (ship.direction == 'vertical') {
-        shipElement.style.width = "50px"; // Taille du bateau en pixels
-        shipElement.style.height = "".concat(ship.size * 50, "px"); // Taille du bateau en pixels
+        shipElement.style.width = "50px";
+        shipElement.style.height = "".concat(ship.size * 50, "px");
     }
     else {
-        shipElement.style.width = "".concat(ship.size * 50, "px"); // Taille du bateau en pixels
-        shipElement.style.height = "50px"; // Taille du bateau en pixels
+        shipElement.style.width = "".concat(ship.size * 50, "px");
+        shipElement.style.height = "50px";
     }
-    shipElement.style.backgroundColor = 'black'; // Couleur du bateau, ajustez selon vos préférences
+    shipElement.style.backgroundColor = ship.selected ? 'blue' : 'black';
     shipElement.style.cursor = 'pointer';
     shipElement.addEventListener('click', function () {
         var shipElements = shipContainer.querySelectorAll('div');
+        shipsArray.forEach(function (ship) { return ship.selected = false; });
         shipElements.forEach(function (shipElement) {
             shipElement.style.backgroundColor = 'black';
         });
+        console.log(shipElements);
+        ship.selected = true;
         actualBoat = ship;
         shipElement.style.backgroundColor = 'blue';
         console.log('Bateau cliqué:', ship);
