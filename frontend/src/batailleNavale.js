@@ -104,3 +104,24 @@ function displayShip(ship) {
 }
 // Exemple d'utilisation de la fonction displayShip
 shipsArray.forEach(function (ship) { return displayShip(ship); });
+var changeDirectionButton = document.createElement('button');
+changeDirectionButton.textContent = 'Changer la direction';
+document.body.appendChild(changeDirectionButton);
+changeDirectionButton.addEventListener('click', function () {
+    if (actualBoat) {
+        // Vérifier si la direction actuelle est 'horizontal' et la changer en 'vertical', et vice versa
+        actualBoat.direction = actualBoat.direction === 'horizontal' ? 'vertical' : 'horizontal';
+        console.log('Direction du bateau changée en', actualBoat.direction);
+        clearShipContainer();
+        // Redessiner tous les bateaux avec leurs nouvelles directions
+        shipsArray.forEach(function (ship) { return displayShip(ship); });
+    }
+    else {
+        console.log('Aucun bateau sélectionné.');
+    }
+});
+function clearShipContainer() {
+    while (shipContainer.firstChild) {
+        shipContainer.removeChild(shipContainer.firstChild);
+    }
+}

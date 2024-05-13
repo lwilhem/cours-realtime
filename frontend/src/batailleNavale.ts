@@ -90,7 +90,7 @@ shipContainer.style.gap = '20px'; // Ajouter un espace entre la grille et les ba
 document.body.appendChild(shipContainer);
 
 // Fonction pour afficher un bateau
-function displayShip(ship: { size: number; startX: number; startY: number; direction: 'horizontal' | 'vertical' }): void {
+function displayShip(ship: Ship): void {
     const shipElement = document.createElement('div');
     if(ship.direction == 'vertical'){
         shipElement.style.width = `50px`; // Taille du bateau en pixels
@@ -100,7 +100,6 @@ function displayShip(ship: { size: number; startX: number; startY: number; direc
         shipElement.style.width = `${ship.size * 50}px`; // Taille du bateau en pixels
         shipElement.style.height = `50px`; // Taille du bateau en pixels
     }
-
     shipElement.style.backgroundColor = 'black'; // Couleur du bateau, ajustez selon vos préférences
     shipElement.style.cursor = 'pointer';
     shipElement.addEventListener('click', () => {
@@ -117,3 +116,32 @@ function displayShip(ship: { size: number; startX: number; startY: number; direc
 
 // Exemple d'utilisation de la fonction displayShip
 shipsArray.forEach(ship => displayShip(ship));
+
+
+
+
+
+
+const changeDirectionButton = document.createElement('button');
+changeDirectionButton.textContent = 'Changer la direction';
+document.body.appendChild(changeDirectionButton);
+
+changeDirectionButton.addEventListener('click', () => {
+    if (actualBoat) {
+        // Vérifier si la direction actuelle est 'horizontal' et la changer en 'vertical', et vice versa
+        actualBoat.direction = actualBoat.direction === 'horizontal'? 'vertical' : 'horizontal';
+        console.log('Direction du bateau changée en', actualBoat.direction);
+        clearShipContainer();
+
+        // Redessiner tous les bateaux avec leurs nouvelles directions
+        shipsArray.forEach(ship => displayShip(ship));
+    } else {
+        console.log('Aucun bateau sélectionné.');
+    }
+});
+
+function clearShipContainer(): void {
+    while (shipContainer.firstChild) {
+        shipContainer.removeChild(shipContainer.firstChild);
+    }
+}
