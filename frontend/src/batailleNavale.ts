@@ -52,19 +52,22 @@ for (let i = 0; i < 10; i++) {
         cell.addEventListener('click', () => {
             if(actualBoat !== null){
                 let colorValue = 1;
-                affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue);
-                const boatToRemove = shipsArray.find(ship => ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size);
-                if (boatToRemove) {
-                    // Supprimer le bateau de shipsArray
-                    const index = shipsArray.indexOf(boatToRemove);
-                    if (index > -1) {
-                        shipsArray.splice(index, 1);
-                    }
-        
-                    // Réinitialiser le bateau actuel
-                    actualBoat = null;
-                clearShipContainer();
-                shipsArray.forEach(ship => displayShip(ship));
+                if(affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue)){
+                    const boatToRemove = shipsArray.find(ship => ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size);
+                    if (boatToRemove) {
+                        // Supprimer le bateau de shipsArray
+                        const index = shipsArray.indexOf(boatToRemove);
+                        if (index > -1) {
+                            shipsArray.splice(index, 1);
+                        }
+            
+                        // Réinitialiser le bateau actuel
+                        actualBoat = null;
+                    clearShipContainer();
+                    shipsArray.forEach(ship => displayShip(ship));
+                    checkShipsArrayEmpty();
+                }
+                
                 }                
             }
         });
@@ -169,7 +172,7 @@ function clearShipContainer(): void {
 
 
 
-function affectAdjacentCells(gridValues: number[][], i: number, j: number, boatSize: number, direction: 'horizontal' | 'vertical', colorValue: number) {
+function affectAdjacentCells(gridValues: number[][], i: number, j: number, boatSize: number, direction: 'horizontal' | 'vertical', colorValue: number):boolean {
     let adjacentIndices = [];
     console.log(colorValue);
     console.log("i"+i)
@@ -258,8 +261,18 @@ function affectAdjacentCells(gridValues: number[][], i: number, j: number, boatS
             }
         });
     }
-    
+    return isValid;
+}
 
-    console.log(gridValues[i][j]);
-    console.log('affected');
+
+function checkShipsArrayEmpty():void{
+    if(shipsArray.length == 0){
+        const startGameButton = document.createElement('button');
+        startGameButton.textContent = 'Start Game';
+        startGameButton.addEventListener('click', () => {
+            console.log('Game started!');
+        });
+        document.body.appendChild(startGameButton);
+
+    }
 }

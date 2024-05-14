@@ -37,20 +37,21 @@ var _loop_1 = function (i) {
         cell.addEventListener('click', function () {
             if (actualBoat !== null) {
                 var colorValue = 1;
-                affectAdjacentCells(gridValues, i, j, actualBoat.size, actualBoat.direction, colorValue);
-                var boatToRemove = shipsArray.find(function (ship) { return ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size; });
-                if (boatToRemove) {
-                    // Supprimer le bateau de shipsArray
-                    var index = shipsArray.indexOf(boatToRemove);
-                    if (index > -1) {
-                        shipsArray.splice(index, 1);
+                if (affectAdjacentCells(gridValues, i, j, actualBoat.size, actualBoat.direction, colorValue)) {
+                    var boatToRemove = shipsArray.find(function (ship) { return ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size; });
+                    if (boatToRemove) {
+                        // Supprimer le bateau de shipsArray
+                        var index = shipsArray.indexOf(boatToRemove);
+                        if (index > -1) {
+                            shipsArray.splice(index, 1);
+                        }
+                        // Réinitialiser le bateau actuel
+                        actualBoat = null;
+                        clearShipContainer();
+                        shipsArray.forEach(function (ship) { return displayShip(ship); });
+                        checkShipsArrayEmpty();
                     }
-                    // Réinitialiser le bateau actuel
-                    actualBoat = null;
-                    clearShipContainer();
-                    shipsArray.forEach(function (ship) { return displayShip(ship); });
                 }
-                console.log("retirer");
             }
         });
         cell.addEventListener('mouseenter', function () {
@@ -223,6 +224,15 @@ function affectAdjacentCells(gridValues, i, j, boatSize, direction, colorValue) 
             }
         });
     }
-    console.log(gridValues[i][j]);
-    console.log('affected');
+    return isValid;
+}
+function checkShipsArrayEmpty() {
+    if (shipsArray.length == 0) {
+        var startGameButton = document.createElement('button');
+        startGameButton.textContent = 'Start Game';
+        startGameButton.addEventListener('click', function () {
+            console.log('Game started!');
+        });
+        document.body.appendChild(startGameButton);
+    }
 }
