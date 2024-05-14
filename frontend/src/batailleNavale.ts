@@ -17,13 +17,26 @@ interface Ship {
 
 let actualBoat: Ship | null = null;
 
-const shipsArray: Ship[] = [
+let shipsArray: Ship[] = [
     { size: 5,startX:0,startY:0,direction:'horizontal',selected:false},
     { size: 4,startX:0,startY:0,direction:'horizontal',selected:false},
     { size: 3,startX:0,startY:0,direction:'horizontal',selected:false},
     { size: 3,startX:0,startY:0,direction:'horizontal',selected:false}, 
     { size: 2,startX:0,startY:0,direction:'horizontal',selected:false}, 
 ];
+
+// Create the Reset Game button
+const resetGameButton = document.createElement('button');
+resetGameButton.textContent = 'Reset Game';
+resetGameButton.style.position = 'fixed'; 
+resetGameButton.style.bottom = '20px';
+resetGameButton.style.right = '20px';
+resetGameButton.style.zIndex = '1000'; 
+resetGameButton.addEventListener('click', resetGame);
+
+// Append the button to the document body
+document.body.appendChild(resetGameButton);
+
 
 // Création de la grille
 const gridContainer = document.createElement('div');
@@ -35,62 +48,65 @@ document.body.appendChild(gridContainer);
 const gridValues: number[][] = []; // Tableau pour stocker les valeurs de la grille
 
 // Initialisation de la grille
-for (let i = 0; i < 10; i++) {
-    const row: number[] = [];
-    for (let j = 0; j < 10; j++) {
-        const value = 0;
-        row.push(value);
-        const cell = document.createElement('div');
-        cell.id = `cell-${i}-${j}`;
-        cell.textContent = value.toString();
-        cell.style.width = '50px';
-        cell.style.height = '50px';
-        cell.style.border = '1px solid black';
-        cell.style.textAlign = 'center';
-        cell.style.cursor = 'pointer';
-        cell.style.backgroundColor = colors[value];
-        cell.addEventListener('click', () => {
-            if(actualBoat !== null){
-                let colorValue = 1;
-                if(affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue)){
-                    const boatToRemove = shipsArray.find(ship => ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size);
-                    if (boatToRemove) {
-                        // Supprimer le bateau de shipsArray
-                        const index = shipsArray.indexOf(boatToRemove);
-                        if (index > -1) {
-                            shipsArray.splice(index, 1);
-                        }
-            
-                        // Réinitialiser le bateau actuel
-                        actualBoat = null;
-                    clearShipContainer();
-                    shipsArray.forEach(ship => displayShip(ship));
-                    checkShipsArrayEmpty();
-                }
+function InitGame():void{
+    for (let i = 0; i < 10; i++) {
+        const row: number[] = [];
+        for (let j = 0; j < 10; j++) {
+            const value = 0;
+            row.push(value);
+            const cell = document.createElement('div');
+            cell.id = `cell-${i}-${j}`;
+            cell.textContent = value.toString();
+            cell.style.width = '50px';
+            cell.style.height = '50px';
+            cell.style.border = '1px solid black';
+            cell.style.textAlign = 'center';
+            cell.style.cursor = 'pointer';
+            cell.style.backgroundColor = colors[value];
+            cell.addEventListener('click', () => {
+                if(actualBoat !== null){
+                    let colorValue = 1;
+                    if(affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue)){
+                        const boatToRemove = shipsArray.find(ship => ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size);
+                        if (boatToRemove) {
+                            // Supprimer le bateau de shipsArray
+                            const index = shipsArray.indexOf(boatToRemove);
+                            if (index > -1) {
+                                shipsArray.splice(index, 1);
+                            }
                 
-                }                
-            }
-        });
-        cell.addEventListener('mouseenter',()=>{
+                            // Réinitialiser le bateau actuel
+                            actualBoat = null;
+                        clearShipContainer();
+                        shipsArray.forEach(ship => displayShip(ship));
+                        checkShipsArrayEmpty();
+                    }
+                    
+                    }                
+                }
+            });
+            cell.addEventListener('mouseenter',()=>{
+                
+                if(gridValues[i][j] == 0 && actualBoat !==null){
+                    let colorValue = 4;
+                    affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue);
+                }
+            })
+            cell.addEventListener('mouseleave',()=>{
+                if(gridValues[i][j] != 1 && actualBoat !== null){
+                    console.log(gridValues);
+                    let colorValue = 0;
+                    affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue);
+    
+                }
+            })
             
-            if(gridValues[i][j] == 0 && actualBoat !==null){
-                let colorValue = 4;
-                affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue);
-            }
-        })
-        cell.addEventListener('mouseleave',()=>{
-            if(gridValues[i][j] != 1 && actualBoat !== null){
-                console.log(gridValues);
-                let colorValue = 0;
-                affectAdjacentCells(gridValues,i, j, actualBoat.size, actualBoat.direction,colorValue);
-
-            }
-        })
-        
-        gridContainer.appendChild(cell);
+            gridContainer.appendChild(cell);
+        }
+        gridValues.push(row);
     }
-    gridValues.push(row);
 }
+
 
 
 // Créer un conteneur pour les bateaux
@@ -276,3 +292,31 @@ function checkShipsArrayEmpty():void{
 
     }
 }
+
+function resetGame():void{
+    shipsArray = [
+        { size: 5,startX:0,startY:0,direction:'horizontal',selected:false},
+        { size: 4,startX:0,startY:0,direction:'horizontal',selected:false},
+        { size: 3,startX:0,startY:0,direction:'horizontal',selected:false},
+        { size: 3,startX:0,startY:0,direction:'horizontal',selected:false}, 
+        { size: 2,startX:0,startY:0,direction:'horizontal',selected:false}, 
+    ];
+
+    for (let i = 0; i < 10; i++) {
+        const row: number[] = [];
+        for (let j = 0; j < 10; j++) {
+                const cell = document.getElementById(`cell-${i}-${j}`);
+                console.log(cell);
+                if (cell) {
+                    cell.textContent = "0";
+                    cell.style.backgroundColor = colors[0];
+                }
+        }
+    }
+
+    clearShipContainer();
+    shipsArray.forEach(ship => displayShip(ship));
+}
+
+
+InitGame();
