@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.displayShip = exports.CreateGrid = exports.StartButton = exports.ResetButton = void 0;
-var utils_1 = require("./utils");
-var batailleNavaleManager_1 = require("./batailleNavaleManager");
+var utils_ts_1 = require("./utils.ts");
+var batailleNavaleManager_ts_1 = require("./batailleNavaleManager.ts");
+var gameManager_ts_1 = require("./gameManager.ts");
 // Create the Reset Game button
 function ResetButton() {
     var resetGameButton = document.createElement('button');
@@ -11,7 +12,7 @@ function ResetButton() {
     resetGameButton.style.bottom = '20px';
     resetGameButton.style.right = '20px';
     resetGameButton.style.zIndex = '1000';
-    resetGameButton.addEventListener('click', utils_1.resetGame);
+    resetGameButton.addEventListener('click', utils_ts_1.resetGame);
     // Append the button to the document body
     document.body.appendChild(resetGameButton);
 }
@@ -20,9 +21,7 @@ exports.ResetButton = ResetButton;
 function StartButton() {
     var startGameButton = document.createElement('button');
     startGameButton.textContent = 'Start Game';
-    startGameButton.addEventListener('click', function () {
-        console.log('Game started!');
-    });
+    startGameButton.addEventListener('click', function () { return (0, gameManager_ts_1.StartGame)(); });
     // Append the button to the document body
     document.body.appendChild(startGameButton);
 }
@@ -42,6 +41,7 @@ exports.CreateGrid = CreateGrid;
 function displayShip(ship) {
     // Créer un conteneur pour les bateaux
     var shipContainer = document.createElement('div');
+    shipContainer.classList.add("shipContainer");
     shipContainer.style.display = 'flex';
     shipContainer.style.flexDirection = 'column';
     shipContainer.style.alignItems = 'center';
@@ -58,7 +58,7 @@ function displayShip(ship) {
     }
     shipElement.style.backgroundColor = ship.selected ? 'blue' : 'black';
     shipElement.style.cursor = 'pointer';
-    shipElement.addEventListener('click', function () { return (0, batailleNavaleManager_1.selectBoat)(shipContainer, ship, shipElement); });
+    shipElement.addEventListener('click', function () { return (0, batailleNavaleManager_ts_1.selectBoat)(shipContainer, ship, shipElement); });
     shipContainer.appendChild(shipElement);
 }
 exports.displayShip = displayShip;

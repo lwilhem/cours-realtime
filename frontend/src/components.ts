@@ -1,6 +1,7 @@
 import { Ship } from './types.ts';
 import {resetGame} from './utils.ts';
 import {selectBoat} from './batailleNavaleManager.ts'
+import { StartGame } from './gameManager.ts';
 
 
 
@@ -22,9 +23,7 @@ export function ResetButton():void{
 export function StartButton():void{
     const startGameButton = document.createElement('button');
     startGameButton.textContent = 'Start Game';
-    startGameButton.addEventListener('click', () => {
-        console.log('Game started!');
-    });
+    startGameButton.addEventListener('click', () => StartGame());
     // Append the button to the document body
     document.body.appendChild(startGameButton);
 }

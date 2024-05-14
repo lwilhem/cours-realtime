@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.selectBoat = exports.clearShipContainer = void 0;
-var components_1 = require("./components");
-var components_2 = require("./components");
+exports.selectBoat = exports.clearShipContainer = exports.clearGridValues = exports.resetShipsArray = void 0;
+var components_ts_1 = require("./components.ts");
 // global Variables
 var colors = {
     0: 'white',
@@ -19,10 +18,40 @@ var shipsArray = [
     { size: 3, startX: 0, startY: 0, direction: 'horizontal', selected: false },
     { size: 2, startX: 0, startY: 0, direction: 'horizontal', selected: false },
 ];
+function resetShipsArray() {
+    shipsArray = [
+        { size: 5, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+        { size: 4, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+        { size: 3, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+        { size: 3, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+        { size: 2, startX: 0, startY: 0, direction: 'horizontal', selected: false },
+    ];
+    return shipsArray;
+}
+exports.resetShipsArray = resetShipsArray;
+function clearGridValues() {
+    for (var i = 0; i < 10; i++) {
+        var row = [];
+        for (var j = 0; j < 10; j++) {
+            var value = 0;
+            gridValues[i][j] = value;
+            var cell = document.getElementById("cell-".concat(i, "-").concat(j));
+            console.log(cell);
+            if (cell) {
+                console.log("row" + i + j + "=" + value);
+                row.push(value);
+                cell.textContent = value.toString();
+                cell.style.backgroundColor = colors[value];
+            }
+        }
+    }
+    console.log(gridValues);
+}
+exports.clearGridValues = clearGridValues;
 var gridValues = [];
 // Initialisation de la grille
 function InitGame() {
-    var gridContainer = (0, components_1.CreateGrid)();
+    var gridContainer = (0, components_ts_1.CreateGrid)();
     var _loop_1 = function (i) {
         var row = [];
         var _loop_2 = function (j) {
@@ -51,7 +80,7 @@ function InitGame() {
                             // Réinitialiser le bateau actuel
                             actualBoat = null;
                             clearShipContainer();
-                            shipsArray.forEach(function (ship) { return (0, components_2.displayShip)(ship); });
+                            shipsArray.forEach(function (ship) { return (0, components_ts_1.displayShip)(ship); });
                             checkShipsArrayEmpty();
                         }
                     }
@@ -83,7 +112,7 @@ function InitGame() {
 }
 InitGame();
 // Exemple d'utilisation de la fonction displayShip
-shipsArray.forEach(function (ship) { return (0, components_2.displayShip)(ship); });
+shipsArray.forEach(function (ship) { return (0, components_ts_1.displayShip)(ship); });
 var changeDirectionButton = document.createElement('button');
 changeDirectionButton.textContent = 'Changer la direction';
 document.body.appendChild(changeDirectionButton);
@@ -94,17 +123,17 @@ changeDirectionButton.addEventListener('click', function () {
         console.log('Direction du bateau changée en', actualBoat.direction);
         clearShipContainer();
         // Redessiner tous les bateaux avec leurs nouvelles directions
-        shipsArray.forEach(function (ship) { return (0, components_2.displayShip)(ship); });
+        shipsArray.forEach(function (ship) { return (0, components_ts_1.displayShip)(ship); });
     }
     else {
         console.log('Aucun bateau sélectionné.');
     }
 });
 function clearShipContainer() {
-    var shipContainer = document.getElementById('shipContainer');
-    while (shipContainer === null || shipContainer === void 0 ? void 0 : shipContainer.firstChild) {
-        shipContainer.removeChild(shipContainer.firstChild);
-    }
+    var shipContainer = Array.from(document.getElementsByClassName('shipContainer'));
+    shipContainer.forEach(function (ship) {
+        ship.remove();
+    });
 }
 exports.clearShipContainer = clearShipContainer;
 function affectAdjacentCells(gridValues, i, j, boatSize, direction, colorValue) {
@@ -216,7 +245,7 @@ function selectBoat(shipContainer, ship, shipElement) {
 exports.selectBoat = selectBoat;
 function checkShipsArrayEmpty() {
     if (shipsArray.length == 0) {
-        (0, components_1.StartButton)();
-        (0, components_1.ResetButton)();
+        (0, components_ts_1.StartButton)();
     }
 }
+(0, components_ts_1.ResetButton)();
