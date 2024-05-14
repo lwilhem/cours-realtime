@@ -1,3 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.selectBoat = exports.clearShipContainer = void 0;
+var components_1 = require("./components");
+var components_2 = require("./components");
+// global Variables
 var colors = {
     0: 'white',
     1: 'black',
@@ -13,25 +19,10 @@ var shipsArray = [
     { size: 3, startX: 0, startY: 0, direction: 'horizontal', selected: false },
     { size: 2, startX: 0, startY: 0, direction: 'horizontal', selected: false },
 ];
-// Create the Reset Game button
-var resetGameButton = document.createElement('button');
-resetGameButton.textContent = 'Reset Game';
-resetGameButton.style.position = 'fixed';
-resetGameButton.style.bottom = '20px';
-resetGameButton.style.right = '20px';
-resetGameButton.style.zIndex = '1000';
-resetGameButton.addEventListener('click', resetGame);
-// Append the button to the document body
-document.body.appendChild(resetGameButton);
-// Création de la grille
-var gridContainer = document.createElement('div');
-gridContainer.style.display = 'grid';
-gridContainer.style.gridTemplateColumns = 'repeat(10, 50px)';
-gridContainer.style.gridTemplateRows = 'repeat(10, 50px)';
-document.body.appendChild(gridContainer);
-var gridValues = []; // Tableau pour stocker les valeurs de la grille
+var gridValues = [];
 // Initialisation de la grille
 function InitGame() {
+    var gridContainer = (0, components_1.CreateGrid)();
     var _loop_1 = function (i) {
         var row = [];
         var _loop_2 = function (j) {
@@ -50,7 +41,7 @@ function InitGame() {
                 if (actualBoat !== null) {
                     var colorValue = 1;
                     if (affectAdjacentCells(gridValues, i, j, actualBoat.size, actualBoat.direction, colorValue)) {
-                        var boatToRemove = shipsArray.find(function (ship) { return ship.startX === actualBoat.startX && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size; });
+                        var boatToRemove = shipsArray.find(function (ship) { return ship.startX === (actualBoat === null || actualBoat === void 0 ? void 0 : actualBoat.startX) && ship.startY === actualBoat.startY && ship.direction === actualBoat.direction && ship.size === actualBoat.size; });
                         if (boatToRemove) {
                             // Supprimer le bateau de shipsArray
                             var index = shipsArray.indexOf(boatToRemove);
@@ -60,7 +51,7 @@ function InitGame() {
                             // Réinitialiser le bateau actuel
                             actualBoat = null;
                             clearShipContainer();
-                            shipsArray.forEach(function (ship) { return displayShip(ship); });
+                            shipsArray.forEach(function (ship) { return (0, components_2.displayShip)(ship); });
                             checkShipsArrayEmpty();
                         }
                     }
@@ -90,42 +81,9 @@ function InitGame() {
         _loop_1(i);
     }
 }
-// Créer un conteneur pour les bateaux
-var shipContainer = document.createElement('div');
-shipContainer.style.display = 'flex';
-shipContainer.style.flexDirection = 'column';
-shipContainer.style.alignItems = 'center';
-shipContainer.style.gap = '20px';
-document.body.appendChild(shipContainer);
-// Fonction pour afficher un bateau
-function displayShip(ship) {
-    var shipElement = document.createElement('div');
-    if (ship.direction == 'vertical') {
-        shipElement.style.width = "50px";
-        shipElement.style.height = "".concat(ship.size * 50, "px");
-    }
-    else {
-        shipElement.style.width = "".concat(ship.size * 50, "px");
-        shipElement.style.height = "50px";
-    }
-    shipElement.style.backgroundColor = ship.selected ? 'blue' : 'black';
-    shipElement.style.cursor = 'pointer';
-    shipElement.addEventListener('click', function () {
-        var shipElements = shipContainer.querySelectorAll('div');
-        shipsArray.forEach(function (ship) { return ship.selected = false; });
-        shipElements.forEach(function (shipElement) {
-            shipElement.style.backgroundColor = 'black';
-        });
-        console.log(shipElements);
-        ship.selected = true;
-        actualBoat = ship;
-        shipElement.style.backgroundColor = 'blue';
-        console.log('Bateau cliqué:', ship);
-    });
-    shipContainer.appendChild(shipElement);
-}
+InitGame();
 // Exemple d'utilisation de la fonction displayShip
-shipsArray.forEach(function (ship) { return displayShip(ship); });
+shipsArray.forEach(function (ship) { return (0, components_2.displayShip)(ship); });
 var changeDirectionButton = document.createElement('button');
 changeDirectionButton.textContent = 'Changer la direction';
 document.body.appendChild(changeDirectionButton);
@@ -136,17 +94,19 @@ changeDirectionButton.addEventListener('click', function () {
         console.log('Direction du bateau changée en', actualBoat.direction);
         clearShipContainer();
         // Redessiner tous les bateaux avec leurs nouvelles directions
-        shipsArray.forEach(function (ship) { return displayShip(ship); });
+        shipsArray.forEach(function (ship) { return (0, components_2.displayShip)(ship); });
     }
     else {
         console.log('Aucun bateau sélectionné.');
     }
 });
 function clearShipContainer() {
-    while (shipContainer.firstChild) {
+    var shipContainer = document.getElementById('shipContainer');
+    while (shipContainer === null || shipContainer === void 0 ? void 0 : shipContainer.firstChild) {
         shipContainer.removeChild(shipContainer.firstChild);
     }
 }
+exports.clearShipContainer = clearShipContainer;
 function affectAdjacentCells(gridValues, i, j, boatSize, direction, colorValue) {
     var adjacentIndices = [];
     console.log(colorValue);
@@ -238,36 +198,25 @@ function affectAdjacentCells(gridValues, i, j, boatSize, direction, colorValue) 
     }
     return isValid;
 }
+function selectBoat(shipContainer, ship, shipElement) {
+    {
+        var shipElements = shipContainer.querySelectorAll('div');
+        shipsArray.forEach(function (ship) { return ship.selected = false; });
+        shipElements.forEach(function (shipElement) {
+            shipElement.style.backgroundColor = 'black';
+        });
+        console.log(shipElements);
+        ship.selected = true;
+        actualBoat = ship;
+        shipElement.style.backgroundColor = 'blue';
+        console.log('Bateau cliqué:', ship);
+    }
+    ;
+}
+exports.selectBoat = selectBoat;
 function checkShipsArrayEmpty() {
     if (shipsArray.length == 0) {
-        var startGameButton = document.createElement('button');
-        startGameButton.textContent = 'Start Game';
-        startGameButton.addEventListener('click', function () {
-            console.log('Game started!');
-        });
-        document.body.appendChild(startGameButton);
+        (0, components_1.StartButton)();
+        (0, components_1.ResetButton)();
     }
 }
-function resetGame() {
-    shipsArray = [
-        { size: 5, startX: 0, startY: 0, direction: 'horizontal', selected: false },
-        { size: 4, startX: 0, startY: 0, direction: 'horizontal', selected: false },
-        { size: 3, startX: 0, startY: 0, direction: 'horizontal', selected: false },
-        { size: 3, startX: 0, startY: 0, direction: 'horizontal', selected: false },
-        { size: 2, startX: 0, startY: 0, direction: 'horizontal', selected: false },
-    ];
-    for (var i = 0; i < 10; i++) {
-        var row = [];
-        for (var j = 0; j < 10; j++) {
-            var cell = document.getElementById("cell-".concat(i, "-").concat(j));
-            console.log(cell);
-            if (cell) {
-                cell.textContent = "0";
-                cell.style.backgroundColor = colors[0];
-            }
-        }
-    }
-    clearShipContainer();
-    shipsArray.forEach(function (ship) { return displayShip(ship); });
-}
-InitGame();
