@@ -35,7 +35,24 @@ return shipsArray
 }
 
 
-
+export function clearGridValues(){
+    for (let i = 0; i < 10; i++) {
+        const row: number[] = [];
+        for (let j = 0; j < 10; j++) {
+                let value = 0;
+                gridValues[i][j] = value;
+                const cell = document.getElementById(`cell-${i}-${j}`);
+                console.log(cell);
+                if (cell) {
+                    console.log("row"+i+j+"="+value);    
+                    row.push(value); 
+                    cell.textContent = value.toString();
+                    cell.style.backgroundColor = colors[value];
+                }
+        }
+    }
+    console.log(gridValues);
+}
 
 const gridValues: number[][] = []; 
 
