@@ -1,5 +1,6 @@
 import { Ship } from './types.ts';
 import { StartButton,ResetButton,CreateGrid,displayShip } from './components.ts';
+import { StartGame } from './gameManager.ts';
 
 
 // global Variables
@@ -54,7 +55,7 @@ export function clearGridValues(){
     console.log(gridValues);
 }
 
-const gridValues: number[][] = []; 
+export const gridValues: number[][] = []; 
 
 // Initialisation de la grille
 function InitGame():void{
@@ -64,7 +65,7 @@ function InitGame():void{
         for (let j = 0; j < 10; j++) {
             const value = 0;
             row.push(value);
-            const cell = document.createElement('div');
+            let cell = document.createElement('div');
             cell.id = `cell-${i}-${j}`;
             cell.textContent = value.toString();
             cell.style.width = '50px';
@@ -281,5 +282,9 @@ function checkShipsArrayEmpty():void{
 }
 ResetButton();
 
+
+//temporary
+
+StartGame();
 
 

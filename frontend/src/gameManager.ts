@@ -1,4 +1,5 @@
 import { CreateGrid } from './components.ts';
+import { gridValues as P1gridValues } from './batailleNavaleManager.ts';
 
 
 
@@ -11,12 +12,14 @@ const colors:{[key:number]:string} = {
 };
 const gridValues: number[][] = []; 
 
+
+
 export function StartGame():void{
     let gridContainer = CreateGrid();
     for (let i = 0; i < 10; i++) {
         const row: number[] = [];
         for (let j = 0; j < 10; j++) {
-            const value = 0;
+            let value = 0;
             row.push(value);
             const cell = document.createElement('div');
             cell.id = `cell-${i}-${j}`;
@@ -28,7 +31,7 @@ export function StartGame():void{
             cell.style.cursor = 'pointer';
             cell.style.backgroundColor = colors[value];
             cell.addEventListener('click', () => {
-                
+                CheckBoom(i,j, cell)
             });
             cell.addEventListener('mouseenter',()=>{
                 
@@ -47,4 +50,17 @@ export function StartGame():void{
         }
         gridValues.push(row);
     }
+}
+
+function CheckBoom(i: number, j: number, cell: HTMLElement){
+    let colorvalue = 0
+    if (P1gridValues[i][j] == 1){
+         colorvalue = 2
+    }else {
+         colorvalue = 3
+    }
+    
+    cell.textContent = colorvalue.toString()
+    cell.style.backgroundColor = colors[colorvalue]
+    console.log(P1gridValues);
 }
