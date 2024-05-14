@@ -47,7 +47,6 @@ export function clearGridValues(){
                 if (cell) {
                     console.log("row"+i+j+"="+value);    
                     row.push(value); 
-                    cell.textContent = value.toString();
                     cell.style.backgroundColor = colors[value];
                 }
         }
@@ -67,7 +66,6 @@ function InitGame():void{
             row.push(value);
             let cell = document.createElement('div');
             cell.id = `cell-${i}-${j}`;
-            cell.textContent = value.toString();
             cell.style.width = '50px';
             cell.style.height = '50px';
             cell.style.border = '1px solid black';
@@ -250,7 +248,6 @@ function affectAdjacentCells(gridValues: number[][], i: number, j: number, boatS
                 const adjacentCell = document.getElementById(`cell-${x}-${y}`);
                 console.log(adjacentCell);
                 if (adjacentCell) {
-                    adjacentCell.textContent = gridValues[x][y].toString();
                     adjacentCell.style.backgroundColor = colors[colorValue];
                 }
             }

@@ -23,7 +23,6 @@ export function StartGame():void{
             row.push(value);
             const cell = document.createElement('div');
             cell.id = `cell-${i}-${j}`;
-            cell.textContent = value.toString();
             cell.style.width = '50px';
             cell.style.height = '50px';
             cell.style.border = '1px solid black';
@@ -60,7 +59,6 @@ function CheckBoom(i: number, j: number, cell: HTMLElement){
          colorvalue = 3
     }
     
-    cell.textContent = colorvalue.toString()
     cell.style.backgroundColor = colors[colorvalue]
     console.log(P1gridValues);
 }

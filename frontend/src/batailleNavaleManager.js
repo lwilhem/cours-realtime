@@ -59,7 +59,6 @@ function InitGame() {
             row.push(value);
             var cell = document.createElement('div');
             cell.id = "cell-".concat(i, "-").concat(j);
-            cell.textContent = value.toString();
             cell.style.width = '50px';
             cell.style.height = '50px';
             cell.style.border = '1px solid black';
