@@ -54,6 +54,9 @@ export function displayShip(ship: Ship): void {
     shipContainer.style.flexDirection = 'column';
     shipContainer.style.alignItems = 'center';
     shipContainer.style.gap = '20px'; 
+    shipContainer.style.marginRight = '10px'; 
+    shipContainer.style.marginLeft = '10px'; 
+    shipContainer.style.marginTop = '10px'; 
     document.body.appendChild(shipContainer);
 
     const shipElement = document.createElement('div');

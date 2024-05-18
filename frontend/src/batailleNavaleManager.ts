@@ -255,13 +255,22 @@ function affectAdjacentCells(gridValues: number[][], i: number, j: number, boatS
     }
     return isValid;
 }
+function getRandomColor(): string {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 export function selectBoat(shipContainer:HTMLElement,ship: Ship,shipElement:HTMLElement){
     {
+        const randomColor = getRandomColor();
         const shipElements = shipContainer.querySelectorAll('div');
         shipsArray.forEach(ship => ship.selected = false);
         shipElement.classList.add('flex');
         shipElements.forEach(shipElement => {
-            shipElement.style.backgroundColor = 'black';
+            shipElement.style.backgroundColor = randomColor;
         });
         console.log(shipElements);
         ship.selected = true;
