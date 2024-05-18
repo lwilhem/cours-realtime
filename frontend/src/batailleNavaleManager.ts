@@ -259,7 +259,7 @@ export function selectBoat(shipContainer:HTMLElement,ship: Ship,shipElement:HTML
     {
         const shipElements = shipContainer.querySelectorAll('div');
         shipsArray.forEach(ship => ship.selected = false);
-
+        shipElement.classList.add('flex');
         shipElements.forEach(shipElement => {
             shipElement.style.backgroundColor = 'black';
         });

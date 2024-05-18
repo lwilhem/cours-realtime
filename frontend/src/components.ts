@@ -70,3 +70,4 @@ export function displayShip(ship: Ship): void {
     shipElement.addEventListener('click', () => selectBoat(shipContainer,ship,shipElement))
     shipContainer.appendChild(shipElement);
 }
+
