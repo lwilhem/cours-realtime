@@ -6,7 +6,7 @@ export function resetGame(): void {
     let shipsArray = resetShipsArray();
     
     clearGridValues();
-    const cells = document.querySelectorAll('[id^="cell-"]');
+    const cells = document.querySelectorAll('[id^="cell-"]') as NodeListOf<HTMLElement>;
     cells.forEach(cell => {
         cell.style.backgroundColor = 'white';
     });
