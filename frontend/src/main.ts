@@ -10,11 +10,10 @@ const pinia = createPinia()
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: () => import("./routes/index.vue") },
+    { path: '/', component: () => import('./routes/index.vue') },
     { path: '/game/:room_name', component: () => import('./routes/play.vue') },
   ],
 })
-
 
 app.use(router)
 app.use(pinia)

@@ -8,8 +8,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
-        batailleNavale: 'batailleNavale.html'
-      }
-    }
-  }
+        batailleNavale: 'batailleNavale.html',
+      },
+    },
+  },
 })

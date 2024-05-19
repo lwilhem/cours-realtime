@@ -1,0 +1,14 @@
+{
+  "name": "rendu-realtime",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "backend": "pnpm --filter backend start",
+    "frontend": "pnpm --filter frontend dev",
+    "lint": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.18.1",
+    "eslint": "^8.57.0"
+  }
+}
